@@ -11,24 +11,26 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import PlotCropSelector from './components/PlotCropSelector'
 import WeatherForecastingPage from './pages/WeatherForecastingPage'
-
+import TranslationService from './utils/Translation.jsx'
+import DiseasePredictor from './components/DiseasePredictor.jsx'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
-<div id='app'>
-  <Navbar/>
-  <BrowserRouter>
-  <Routes>
-    <Route path='/' element={<HomePage/>}/>
-   <Route path='/crop-selector' element={<PlotCropSelector/>}/>
-   <Route path='/weather-forecasting' element={<WeatherForecastingPage/>}/>
-  </Routes>
-  </BrowserRouter>
-  <TranslationService />
-  <Footer/>
-</div>
+    <div id='app'>
+      <BrowserRouter>
+        <Navbar/>
+        <Routes>
+          <Route path='/' element={<HomePage/>}/>
+          <Route path='/crop-selector' element={<PlotCropSelector/>}/>
+          <Route path='/weather-forecasting' element={<WeatherForecastingPage/>}/>
+          <Route path='/disease-detection' element={<DiseasePredictor/>}/>
+        </Routes>
+        <Footer/>
+      </BrowserRouter>
+      <TranslationService />
+    </div>
   )
 }
 
