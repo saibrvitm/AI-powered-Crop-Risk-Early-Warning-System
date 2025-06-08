@@ -1,16 +1,43 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, File, UploadFile
 from pydantic import BaseModel
 import joblib
 import numpy as np
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from pathlib import Path
 from typing import Optional
+from tensorflow.keras.preprocessing import image
+from tensorflow.keras.models import load_model
+import io
 
 # Load the saved models
 model_data = joblib.load('./crop-selector/crop_prediction_model.pkl')
 model_crop = model_data['model']  # Get the model from the saved data
-model_water = joblib.load('./water-advisor/crop_model.pkl')
 encoder = joblib.load('./water-advisor/encoder.pkl')
 scaler = joblib.load('./water-advisor/scaler.pkl')
+
+# Load the plant disease model
+plant_disease_model = load_model('./disease-plant/my_plant_model.h5')
+
+# Define class indices for plant disease prediction
+PLANT_DISEASE_CLASSES = {
+    0: "Pepper__bell___Bacterial_spot",
+    1: "Pepper__bell___healthy",
+    2: "PlantVillage",
+    3: "Potato___Early_blight",
+    4: "Potato___healthy",
+    5: "Potato___Late_blight",
+    6: "Tomato_Bacterial_spot",
+    7: "Tomato_Early_blight",
+    8: "Tomato_healthy",
+    9: "Tomato_Late_blight",
+    10: "Tomato_Leaf_Mold",
+    11: "Tomato_Septoria_leaf_spot",
+    12: "Tomato_Spider_mites_Two_spotted_spider_mite",
+    13: "Tomato__Target_Spot",
+    14: "Tomato__Tomato_mosaic_virus",
+    15: "Tomato__Tomato_YellowLeaf__Curl_Virus"
+}
 
 # Define the FastAPI app
 app = FastAPI()
@@ -36,17 +63,6 @@ class CropInput(BaseModel):
     irrigation_type: Optional[str] = None
     season: Optional[str] = None
     crop_type: Optional[str] = None
-
-# Define the input schema for water use prediction
-class WaterInput(BaseModel):
-    Rainfall_Requirement: float
-    Temperature_Requirement: float
-    Soil_Type: str
-    Irrigation_Type: str
-    Water_Scarcity: str
-    Yield: float
-    Crop_Cycle_Duration: float
-    Crop_Name: str
 
 def calculate_soil_quality(N, P, K):
     N_norm = N / 100
@@ -100,31 +116,37 @@ def crop_predict(input_data: CropInput):
     except Exception as e:
         return {"error": str(e)}
 
-# API endpoint for water use, temperature, and rainfall prediction
-@app.post("/api/water_use")
-def water_use_predict(input_data: WaterInput):
+def extract_last_double_underscore_text(text):
+    parts = text.split('__')
+    return parts[-1] if len(parts) > 1 else None
+
+# API endpoint for plant disease prediction
+@app.post("/api/disease-predict")
+async def predict_disease(file: UploadFile = File(...)):
+    """
+    Endpoint to predict plant disease from an uploaded image.
+    """
     try:
-        # Encode categorical variables
-        soil_type_encoded = safe_transform(encoder, input_data.Soil_Type)
-        irrigation_type_encoded = safe_transform(encoder, input_data.Irrigation_Type)
-        water_scarcity_encoded = safe_transform(encoder, input_data.Water_Scarcity)
-        crop_name_encoded = safe_transform(encoder, input_data.Crop_Name)
-        
-        # Create feature array for prediction
-        features = np.array([[input_data.Rainfall_Requirement, input_data.Temperature_Requirement,
-                            soil_type_encoded, irrigation_type_encoded, water_scarcity_encoded,
-                            input_data.Yield, input_data.Crop_Cycle_Duration, crop_name_encoded]])
-        
-        # Scale the input features
-        features_scaled = scaler.transform(features)
-        
-        # Predict water use, temperature, and rainfall requirement
-        predictions = model_water.predict(features_scaled)[0]
-        
+        # Read and validate the image
+        contents = await file.read()
+        img = image.load_img(io.BytesIO(contents), target_size=(128, 128))
+        img_array = image.img_to_array(img) / 255.0
+        img_array = np.expand_dims(img_array, axis=0)
+
+        # Make prediction
+        prediction = plant_disease_model.predict(img_array)
+        predicted_class = np.argmax(prediction)
+        confidence = float(prediction[0][predicted_class])
+
+        # Get the predicted label
+        predicted_label = PLANT_DISEASE_CLASSES[predicted_class]
+
         return {
-            "predicted_water_use": f"{predictions[0]:.2f} m³ per kg",
-            "predicted_temperature_requirement": f"{predictions[1]:.2f} °C",
-            "predicted_rainfall_requirement": f"{predictions[2]:.2f} mm/year"
+            "disease": extract_last_double_underscore_text(predicted_label) or predicted_label,
+            "confidence": confidence,
+            "is_healthy": "healthy" in predicted_label.lower()
         }
+
     except Exception as e:
-        return {"error": str(e)}
+        raise HTTPException(status_code=400, detail=str(e))
+    

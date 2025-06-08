@@ -46,10 +46,10 @@ const PlotCropSelector = () => {
   const [weatherData, setWeatherData] = useState({ temperature: null, rainfall: null });
   const [showResults, setShowResults] = useState(false);
   const [error, setError] = useState("");
+  const errorRef = useRef(null);
   
   // Additional filter states
   const [soilType, setSoilType] = useState("");
-  const [irrigationType, setIrrigationType] = useState("");
   const [season, setSeason] = useState("");
   const [cropType, setCropType] = useState("");
 
@@ -86,6 +86,13 @@ const PlotCropSelector = () => {
       fetchMonthlyWeatherData(mapCenter[0], mapCenter[1]);
     }
   }, [mapCenter]);
+
+  // Add effect to scroll to error when it changes
+  useEffect(() => {
+    if (error && errorRef.current) {
+      errorRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [error]);
 
   // Function to fetch monthly weather data
   const fetchMonthlyWeatherData = async (lat, lon) => {
@@ -158,11 +165,11 @@ const PlotCropSelector = () => {
   const validateInputs = () => {
     const errors = [];
 
-    // Validate N, P, K (should be between 0 and 100)
+    // Validate N, P, K (only check if they are positive numbers)
     ['N', 'P', 'K'].forEach(nutrient => {
       const value = Number(nutrients[nutrient]);
-      if (isNaN(value) || value < 0 || value > 100) {
-        errors.push(`${nutrient} must be between 0 and 100`);
+      if (isNaN(value) || value < 0) {
+        errors.push(`${nutrient} must be a positive number`);
       }
     });
 
@@ -223,7 +230,6 @@ const PlotCropSelector = () => {
       ph: Number(nutrients.pH),
       rainfall: Number(weatherData.rainfall),
       soil_type: soilType || undefined,
-      irrigation_type: irrigationType || undefined,
       season: season || undefined,
       crop_type: cropType || undefined
     };
@@ -288,7 +294,7 @@ const PlotCropSelector = () => {
         </h2>
 
         {error && (
-          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+          <div ref={errorRef} className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
             {error}
           </div>
         )}
@@ -316,7 +322,7 @@ const PlotCropSelector = () => {
               <div key={nutrient}>
                 <label htmlFor={nutrient} className="block mb-1 text-gray-700">
                   {nutrient === "N" ? "Nitrogen (N)" : nutrient === "P" ? "Phosphorus (P)" : "Potassium (K)"}
-                  <span className="text-sm text-gray-500 ml-1">(0-100 kg/ha)</span>
+                  <span className="text-sm text-gray-500 ml-1">(ppm)</span>
                 </label>
                 <input
                   type="number"
@@ -324,9 +330,8 @@ const PlotCropSelector = () => {
                   name={nutrient}
                   value={nutrients[nutrient]}
                   onChange={handleInputChange}
-                  placeholder={`${nutrient} content (0-100)`}
+                  placeholder={`${nutrient} content in ppm`}
                   min="0"
-                  max="100"
                   step="0.1"
                   className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
                   required
@@ -375,24 +380,6 @@ const PlotCropSelector = () => {
                 <option value="loamy">Loamy</option>
                 <option value="silt">Silt</option>
                 <option value="peaty">Peaty</option>
-              </select>
-            </div>
-
-            <div>
-              <label htmlFor="irrigationType" className="block mb-1 text-gray-700">
-                Irrigation Type
-              </label>
-              <select
-                id="irrigationType"
-                value={irrigationType}
-                onChange={(e) => setIrrigationType(e.target.value)}
-                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-              >
-                <option value="">Select Irrigation Type</option>
-                <option value="drip">Drip</option>
-                <option value="sprinkler">Sprinkler</option>
-                <option value="flood">Flood</option>
-                <option value="rainfed">Rainfed</option>
               </select>
             </div>
 

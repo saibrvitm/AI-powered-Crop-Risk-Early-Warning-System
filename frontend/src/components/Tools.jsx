@@ -23,11 +23,8 @@ const Tools = () => {
             </h3>
         <p className="mt-2 text-gray-600">
         Get tailored crop suggestions for your soil and climate.
-
         </p>
       </div>
-
-
 
       <div className="bg-white p-6 rounded-lg shadow hover:shadow-md transition">
         <div className="text-green-600 mb-4">
@@ -37,10 +34,9 @@ const Tools = () => {
             <a href="risk-management">Risk Management</a>
             </h3>
         <p className="mt-2 text-gray-600">
-          Hyperlocal and accurate weather predictions tailored to your farm’s location to reduce risk and losses.
+          Hyperlocal and accurate weather predictions tailored to your farm's location to reduce risk and losses.
         </p>
       </div>
-
 
       <div className="bg-white p-6 rounded-lg shadow hover:shadow-md transition">
         <div className="text-green-600 mb-4">
@@ -56,31 +52,15 @@ const Tools = () => {
 
       <div className="bg-white p-6 rounded-lg shadow hover:shadow-md transition">
         <div className="text-green-600 mb-4">
-          📊
-        </div>
-        <h3 className="text-xl font-semibold text-gray-900">
-            <a href="irrigation-advisor">Irrigation Advisor</a>
-            </h3>
-        <p className="mt-2 text-gray-600">
-        Optimize water usage based on weather and soil data.
-
-
-        </p>
-      </div>
-      <div className="bg-white p-6 rounded-lg shadow hover:shadow-md transition">
-        <div className="text-green-600 mb-4">
           📡
         </div>
         <h3 className="text-xl font-semibold text-gray-900">
             <a href="/weather-forecasting">Weather Forecasting</a>
             </h3>
         <p className="mt-2 text-gray-600">
-          Hyperlocal and accurate weather predictions tailored to your farm’s location to reduce risk and losses.
+          Hyperlocal and accurate weather predictions tailored to your farm's location to reduce risk and losses.
         </p>
       </div>
-
-
-
 
       <div className="bg-white p-6 rounded-lg shadow hover:shadow-md transition">
         <div className="text-green-600 mb-4">
@@ -88,14 +68,12 @@ const Tools = () => {
         </div>
         <h3 className="text-xl font-semibold text-gray-900">Smart Alerts & Automations</h3>
         <p className="mt-2 text-gray-600">
-          Receive real-time alerts and automate tasks like irrigation or pest deterrence based on sensor data.
+          Receive real-time alerts and automate tasks like pest deterrence based on sensor data.
         </p>
       </div>
     </div>
   </div>
 </section>
-
-      
     </div>
   )
 }
