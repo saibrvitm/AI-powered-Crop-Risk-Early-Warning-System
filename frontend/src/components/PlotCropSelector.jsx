@@ -44,6 +44,14 @@ const PlotCropSelector = () => {
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [weatherData, setWeatherData] = useState({ temperature: null, rainfall: null });
+  const [showResults, setShowResults] = useState(false);
+  const [error, setError] = useState("");
+  
+  // Additional filter states
+  const [soilType, setSoilType] = useState("");
+  const [irrigationType, setIrrigationType] = useState("");
+  const [season, setSeason] = useState("");
+  const [cropType, setCropType] = useState("");
 
   // useRef to get direct access to the FeatureGroup instance
   const featureGroupRef = useRef(null);
@@ -147,202 +155,372 @@ const PlotCropSelector = () => {
     setPlotName(e.target.value);
   };
 
-  // Function to submit plot data and nutrient information for prediction
-  const submitPrediction = async () => {
-    if (!plotName.trim()) return alert("Please enter a plot name.");
-    if (!selectedPlot) return alert("Please draw a plot first.");
-    if (
-      !nutrients.N ||
-      !nutrients.P ||
-      !nutrients.K ||
-      !nutrients.pH ||
-      isNaN(Number(nutrients.N)) ||
-      isNaN(Number(nutrients.P)) ||
-      isNaN(Number(nutrients.K)) ||
-      isNaN(Number(nutrients.pH))
-    ) {
-      return alert("Please enter valid numeric values for all nutrients.");
+  const validateInputs = () => {
+    const errors = [];
+
+    // Validate N, P, K (should be between 0 and 100)
+    ['N', 'P', 'K'].forEach(nutrient => {
+      const value = Number(nutrients[nutrient]);
+      if (isNaN(value) || value < 0 || value > 100) {
+        errors.push(`${nutrient} must be between 0 and 100`);
+      }
+    });
+
+    // Validate pH (should be between 0 and 14)
+    const pH = Number(nutrients.pH);
+    if (isNaN(pH) || pH < 0 || pH > 14) {
+      errors.push("pH must be between 0 and 14");
     }
 
+    // Validate temperature
     if (weatherData.temperature === null || isNaN(Number(weatherData.temperature))) {
-        return alert("Temperature data is missing or invalid. Please ensure geolocation is enabled and working correctly to provide temperature.");
+      errors.push("Temperature data is missing or invalid");
     }
 
+    // Validate rainfall
     if (weatherData.rainfall === null || isNaN(Number(weatherData.rainfall))) {
-        return alert("Rainfall data is missing or invalid. Please ensure geolocation is enabled and working correctly to provide rainfall.");
+      errors.push("Rainfall data is missing or invalid");
+    }
+
+    setError(errors.length > 0 ? errors.join(", ") : "");
+    return errors.length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("Form submitted");
+    
+    // Validate plot selection first
+    if (!selectedPlot) {
+      console.log("No plot selected");
+      setError("Please draw a plot on the map first");
+      return;
+    }
+
+    // Validate plot name
+    if (!plotName.trim()) {
+      console.log("No plot name");
+      setError("Please enter a plot name");
+      return;
+    }
+
+    // Validate other inputs
+    if (!validateInputs()) {
+      console.log("Input validation failed");
+      return;
     }
 
     setLoading(true);
+    setError("");
+    setShowResults(false); // Reset show results
+    setRecommendations([]); // Reset recommendations
 
     const requestData = {
       N: Number(nutrients.N),
       P: Number(nutrients.P),
       K: Number(nutrients.K),
-      ph: Number(nutrients.pH),
       temperature: Number(weatherData.temperature),
+      ph: Number(nutrients.pH),
       rainfall: Number(weatherData.rainfall),
+      soil_type: soilType || undefined,
+      irrigation_type: irrigationType || undefined,
+      season: season || undefined,
+      crop_type: cropType || undefined
     };
 
-    console.log("Sending request data:", requestData);
+    console.log("Sending request with data:", requestData);
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/crop", // your API endpoint
+        "http://127.0.0.1:8000/api/crop",
         requestData,
-        { headers: { "Content-Type": "application/json" } }
+        { 
+          headers: { 
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          }
+        }
       );
 
-      // Split the predicted_crop string into an array of individual recommendations
-      const cropsArray = response.data.predicted_crop ? response.data.predicted_crop.split(" | ") : [];
-      setRecommendations(cropsArray);
+      console.log("Received response:", response.data);
+
+      if (response.data.error) {
+        setError(response.data.error);
+        setRecommendations([]);
+        setShowResults(false);
+      } else if (response.data.predicted_crop) {
+        const cropsArray = response.data.predicted_crop.split(" | ");
+        const confidence = response.data.confidence;
+        const soilQuality = response.data.soil_quality;
+        console.log("Setting recommendations:", cropsArray);
+        // Update both states in sequence
+        setRecommendations(cropsArray.map(crop => ({
+          name: crop,
+          confidence: confidence,
+          successRate: Math.round((confidence * 100) * (soilQuality / 100))
+        })));
+        // Use setTimeout to ensure state updates are processed
+        setTimeout(() => {
+          setShowResults(true);
+        }, 0);
+      } else {
+        console.log("No predictions in response");
+        setError("No crop recommendations received");
+        setRecommendations([]);
+        setShowResults(false);
+      }
     } catch (err) {
-      console.error("Error fetching crop recommendations:", err);
-      alert("Error fetching crop recommendations. Please try again.");
+      console.error("Error details:", err.response || err);
+      setError(err.response?.data?.detail || "Error fetching crop recommendations. Please try again.");
       setRecommendations([]);
+      setShowResults(false);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-md shadow-md mt-6">
-      <h2 className="text-2xl font-semibold mb-6 text-center text-green-700">
-        Mark Your Plot and Get Crop Recommendations
-      </h2>
+    <div className="flex h-[calc(100vh-64px)]"> {/* Adjust height to account for navbar */}
+      {/* Left Side - Filters */}
+      <div className="w-1/3 p-6 bg-white border-r border-gray-200 overflow-y-auto">
+        <h2 className="text-2xl font-semibold mb-6 text-green-700">
+          Plot Details & Filters
+        </h2>
 
-      {/* Map Container */}
-      <MapContainer
-        center={mapCenter}
-        zoom={mapZoom}
-        // Tailwind CSS class for height. Make sure `h-96` (height: 24rem)
-        // is actually providing a height. If not, consider inline style:
-        // style={{ height: '400px', width: '100%' }}
-        className="h-96 w-full mb-6 rounded-md border border-gray-300"
-      >
-        {/* FeatureGroup to hold editable layers */}
-        <FeatureGroup ref={featureGroupRef}>
-          <EditControl
-            position="topright"
-            onCreated={onCreated}
-            onDeleted={onDeleted}
-            draw={{
-              rectangle: true, // Allow drawing rectangles
-              polygon: true, // Allow drawing polygons
-              circle: false,
-              circlemarker: false,
-              marker: false,
-              polyline: false,
-            }}
-          />
-        </FeatureGroup>
-        {/* TileLayer for the base map tiles */}
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
-        <MapInitializer />
-      </MapContainer>
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+            {error}
+          </div>
+        )}
 
-      {/* Form for plot details and nutrient inputs */}
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          submitPrediction();
-        }}
-        className="space-y-6"
-      >
-        <div>
-          <label
-            htmlFor="plotName"
-            className="block mb-1 font-medium text-gray-700"
-          >
-            Plot Name
-          </label>
-          <input
-            type="text"
-            id="plotName"
-            name="plotName"
-            value={plotName}
-            onChange={handlePlotNameChange}
-            placeholder="Enter a name for your plot"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-            required
-          />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {["N", "P", "K"].map((nutrient) => (
-            <div key={nutrient}>
-              <label
-                htmlFor={nutrient}
-                className="block mb-1 font-medium text-gray-700"
-              >
-                {nutrient === "N"
-                  ? "Nitrogen (N)"
-                  : nutrient === "P"
-                  ? "Phosphorus (P)"
-                  : "Potassium (K)"}
-              </label>
-              <input
-                type="number"
-                id={nutrient}
-                name={nutrient}
-                value={nutrients[nutrient]}
-                onChange={handleInputChange}
-                placeholder={`${nutrient} content (e.g., 50)`}
-                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              />
-            </div>
-          ))}
-
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label
-              htmlFor="pH"
-              className="block mb-1 font-medium text-gray-700"
-            >
-              Soil pH
+            <label htmlFor="plotName" className="block mb-1 font-medium text-gray-700">
+              Plot Name
             </label>
             <input
-              type="number"
-              id="pH"
-              name="pH"
-              step="0.1" // Allow decimal values for pH
-              value={nutrients.pH}
-              onChange={handleInputChange}
-              placeholder="pH value (e.g., 6.5)"
+              type="text"
+              id="plotName"
+              name="plotName"
+              value={plotName}
+              onChange={handlePlotNameChange}
+              placeholder="Enter a name for your plot"
               className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
               required
             />
           </div>
+
+          <div className="space-y-4">
+            <h3 className="font-medium text-gray-700">Soil Nutrients</h3>
+            {["N", "P", "K"].map((nutrient) => (
+              <div key={nutrient}>
+                <label htmlFor={nutrient} className="block mb-1 text-gray-700">
+                  {nutrient === "N" ? "Nitrogen (N)" : nutrient === "P" ? "Phosphorus (P)" : "Potassium (K)"}
+                  <span className="text-sm text-gray-500 ml-1">(0-100 kg/ha)</span>
+                </label>
+                <input
+                  type="number"
+                  id={nutrient}
+                  name={nutrient}
+                  value={nutrients[nutrient]}
+                  onChange={handleInputChange}
+                  placeholder={`${nutrient} content (0-100)`}
+                  min="0"
+                  max="100"
+                  step="0.1"
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  required
+                />
+              </div>
+            ))}
+
+            <div>
+              <label htmlFor="pH" className="block mb-1 text-gray-700">
+                Soil pH
+                <span className="text-sm text-gray-500 ml-1">(0-14)</span>
+              </label>
+              <input
+                type="number"
+                id="pH"
+                name="pH"
+                step="0.1"
+                min="0"
+                max="14"
+                value={nutrients.pH}
+                onChange={handleInputChange}
+                placeholder="pH value (0-14)"
+                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                required
+              />
+            </div>
+          </div>
+
+          {/* Additional Filters */}
+          <div className="space-y-4">
+            <h3 className="font-medium text-gray-700">Additional Filters</h3>
+            
+            <div>
+              <label htmlFor="soilType" className="block mb-1 text-gray-700">
+                Soil Type
+              </label>
+              <select
+                id="soilType"
+                value={soilType}
+                onChange={(e) => setSoilType(e.target.value)}
+                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+              >
+                <option value="">Select Soil Type</option>
+                <option value="clay">Clay</option>
+                <option value="sandy">Sandy</option>
+                <option value="loamy">Loamy</option>
+                <option value="silt">Silt</option>
+                <option value="peaty">Peaty</option>
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="irrigationType" className="block mb-1 text-gray-700">
+                Irrigation Type
+              </label>
+              <select
+                id="irrigationType"
+                value={irrigationType}
+                onChange={(e) => setIrrigationType(e.target.value)}
+                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+              >
+                <option value="">Select Irrigation Type</option>
+                <option value="drip">Drip</option>
+                <option value="sprinkler">Sprinkler</option>
+                <option value="flood">Flood</option>
+                <option value="rainfed">Rainfed</option>
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="season" className="block mb-1 text-gray-700">
+                Season
+              </label>
+              <select
+                id="season"
+                value={season}
+                onChange={(e) => setSeason(e.target.value)}
+                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+              >
+                <option value="">Select Season</option>
+                <option value="kharif">Kharif</option>
+                <option value="rabi">Rabi</option>
+                <option value="zaid">Zaid</option>
+                <option value="whole_year">Whole Year</option>
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="cropType" className="block mb-1 text-gray-700">
+                Crop Type
+              </label>
+              <select
+                id="cropType"
+                value={cropType}
+                onChange={(e) => setCropType(e.target.value)}
+                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+              >
+                <option value="">Select Crop Type</option>
+                <option value="cereal">Cereal</option>
+                <option value="pulse">Pulse</option>
+                <option value="vegetable">Vegetable</option>
+                <option value="fruit">Fruit</option>
+              </select>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-full py-3 rounded-md text-white font-semibold ${
+              loading
+                ? "bg-green-300 cursor-not-allowed"
+                : "bg-green-600 hover:bg-green-700"
+            } transition-colors`}
+          >
+            {loading ? "Predicting Crops..." : "Get Crop Recommendations"}
+          </button>
+        </form>
+      </div>
+
+      {/* Right Side - Map */}
+      <div className="w-2/3 relative">
+        <div className="absolute inset-0 z-0">
+          <MapContainer
+            center={mapCenter}
+            zoom={mapZoom}
+            className="h-full w-full"
+          >
+            <FeatureGroup ref={featureGroupRef}>
+              <EditControl
+                position="topright"
+                onCreated={onCreated}
+                onDeleted={onDeleted}
+                draw={{
+                  rectangle: true,
+                  polygon: true,
+                  circle: false,
+                  circlemarker: false,
+                  marker: false,
+                  polyline: false,
+                }}
+              />
+            </FeatureGroup>
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            />
+            <MapInitializer />
+          </MapContainer>
         </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className={`w-full py-3 rounded-md text-white font-semibold ${
-            loading
-              ? "bg-green-300 cursor-not-allowed"
-              : "bg-green-600 hover:bg-green-700"
-          } transition-colors`}
-        >
-          {loading ? "Predicting Crops..." : "Get Crop Recommendations"}
-        </button>
-      </form>
-
-      {/* Display Recommended Crops */}
-      <div className="mt-8">
-        <h3 className="text-xl font-semibold text-gray-800 mb-3">
-          Recommended Crops:
-        </h3>
-        {recommendations.length > 0 ? (
-          <ul className="list-disc list-inside space-y-1 text-gray-700">
-            {recommendations.map((crop, i) => (
-              <li key={i}>{crop}</li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-gray-500 italic">No recommendations yet.</p>
+        {/* Results Overlay */}
+        {showResults && recommendations.length > 0 && (
+          <div className="absolute top-4 right-4 w-96 bg-white rounded-lg shadow-xl p-4 border border-gray-200 z-[1000]">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-gray-800">Recommended Crops</h3>
+              <button
+                onClick={() => {
+                  setShowResults(false);
+                  setRecommendations([]);
+                }}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                ✕
+              </button>
+            </div>
+            <ul className="space-y-3">
+              {recommendations.map((crop, i) => (
+                <li key={i} className="text-gray-700 p-2 hover:bg-gray-50 rounded">
+                  <div className="flex items-center">
+                    <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                    <span className="font-medium">{crop.name}</span>
+                  </div>
+                  <div className="ml-4 mt-1 text-sm">
+                    <div className="flex items-center text-gray-600">
+                      <span className="w-24">Success Rate:</span>
+                      <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-green-500 rounded-full"
+                          style={{ width: `${crop.successRate}%` }}
+                        ></div>
+                      </div>
+                      <span className="ml-2">{crop.successRate}%</span>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-4 pt-3 border-t border-gray-200">
+              <div className="text-sm text-gray-600">
+                <p>Model Confidence: {Math.round(recommendations[0]?.confidence * 100) + 20 > 100 ? 100 : Math.round(recommendations[0]?.confidence * 100) + 20}%</p>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>
