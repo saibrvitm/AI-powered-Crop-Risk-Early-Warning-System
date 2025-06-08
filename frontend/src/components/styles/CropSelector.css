@@ -1,0 +1,135 @@
+/* General Container Styling */
+.crop-selector {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background: #fefefe;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    font-family: "Poppins", sans-serif;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  /* Form Fields */
+  .crop-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+  
+  .form-group label {
+    font-size: 0.9rem;
+    color: #475569;
+    font-weight: 600;
+  }
+  
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 1rem;
+    color: #1e293b;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: #f9fafb;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .form-group input:focus,
+  .form-group select:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 6px rgba(59, 130, 246, 0.2);
+  }
+  
+  /* Button Styling */
+  .submit-button,
+  .reset-button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .submit-button {
+    background-color: #1e3a8a;
+    color: white;
+  }
+  
+  .submit-button:hover {
+    background-color: #2563eb;
+    transform: scale(1.05);
+  }
+  
+  .submit-button:disabled {
+    background-color: #93c5fd;
+    cursor: not-allowed;
+  }
+  
+  .reset-button {
+    background-color: #ef4444;
+    color: white;
+  }
+  
+  .reset-button:hover {
+    background-color: #f87171;
+    transform: scale(1.05);
+  }
+  
+  .reset-button:disabled {
+    background-color: #fecaca;
+    cursor: not-allowed;
+  }
+  
+  /* Weather Trends Section */
+  .weather-trends {
+    margin-top: 2rem;
+    padding: 1rem 0.5rem;
+    background: #f9fafb;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+  
+  .weather-trends h3 {
+    font-size: 1.4rem;
+    color: #1e3a8a;
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+  }
+  
+  .weather-trends canvas {
+    margin-top: 1rem;
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    padding: 0.5rem;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .input-map-layout {
+      flex-direction: column;
+    }
+  
+    .crop-form,
+    .map-selector {
+      flex: 1 1 100%;
+    }
+  
+    .button-group {
+      flex-direction: column;
+    }
+  }
+  
