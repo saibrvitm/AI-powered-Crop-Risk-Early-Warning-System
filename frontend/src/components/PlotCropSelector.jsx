@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { MapContainer, TileLayer, FeatureGroup } from "react-leaflet";
+import { MapContainer, TileLayer, FeatureGroup, useMap } from "react-leaflet";
 import { EditControl } from "react-leaflet-draw";
 import axios from "axios";
 
@@ -25,6 +25,17 @@ L.Icon.Default.mergeOptions({
 });
 // --- END FIX ---
 
+const MapInitializer = () => {
+  const map = useMap();
+  useEffect(() => {
+    // Invalidate map size after a short delay to ensure container is rendered
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 100);
+  }, [map]);
+  return null;
+};
+
 const PlotCropSelector = () => {
   const [plots, setPlots] = useState([]); // Store polygons (GeoJSON)
   const [selectedPlot, setSelectedPlot] = useState(null);
@@ -32,6 +43,7 @@ const PlotCropSelector = () => {
   const [nutrients, setNutrients] = useState({ N: "", P: "", K: "", pH: "" });
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [weatherData, setWeatherData] = useState({ temperature: null, rainfall: null });
 
   // useRef to get direct access to the FeatureGroup instance
   const featureGroupRef = useRef(null);
@@ -59,6 +71,46 @@ const PlotCropSelector = () => {
       );
     }
   }, []); // Run once on component mount
+
+  // Fetch weather data when mapCenter changes
+  useEffect(() => {
+    if (mapCenter.length === 2) {
+      fetchMonthlyWeatherData(mapCenter[0], mapCenter[1]);
+    }
+  }, [mapCenter]);
+
+  // Function to fetch monthly weather data
+  const fetchMonthlyWeatherData = async (lat, lon) => {
+    try {
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - 30);
+      const formattedStartDate = startDate.toISOString().split("T")[0];
+      const endDate = new Date().toISOString().split("T")[0];
+
+      const url = `https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lon}&start_date=${formattedStartDate}&end_date=${endDate}&daily=temperature_2m_max,precipitation_sum&timezone=auto`;
+
+      const response = await axios.get(url);
+      const data = response.data;
+
+      if (!data.daily) throw new Error("No daily weather data available");
+
+      const { temperature_2m_max, precipitation_sum } = data.daily;
+
+      const avgTemp = temperature_2m_max.length
+        ? temperature_2m_max.reduce((a, b) => a + b, 0) /
+          temperature_2m_max.length
+        : null;
+      const avgRainfall = precipitation_sum.length
+        ? precipitation_sum.reduce((a, b) => a + b, 0) /
+          precipitation_sum.length
+        : null;
+
+      setWeatherData({ temperature: avgTemp, rainfall: avgRainfall });
+    } catch (err) {
+      console.error("Error fetching weather data:", err);
+      setWeatherData({ temperature: null, rainfall: null });
+    }
+  };
 
   // Callback for when a new shape is drawn
   const onCreated = (e) => {
@@ -108,28 +160,41 @@ const PlotCropSelector = () => {
       isNaN(Number(nutrients.P)) ||
       isNaN(Number(nutrients.K)) ||
       isNaN(Number(nutrients.pH))
-    )
+    ) {
       return alert("Please enter valid numeric values for all nutrients.");
+    }
+
+    if (weatherData.temperature === null || isNaN(Number(weatherData.temperature))) {
+        return alert("Temperature data is missing or invalid. Please ensure geolocation is enabled and working correctly to provide temperature.");
+    }
+
+    if (weatherData.rainfall === null || isNaN(Number(weatherData.rainfall))) {
+        return alert("Rainfall data is missing or invalid. Please ensure geolocation is enabled and working correctly to provide rainfall.");
+    }
 
     setLoading(true);
 
     const requestData = {
-      plot_name: plotName.trim(),
-      plot_coordinates: selectedPlot.geometry.coordinates, // polygon coords
-      nitrogen: Number(nutrients.N),
-      phosphorus: Number(nutrients.P),
-      potassium: Number(nutrients.K),
+      N: Number(nutrients.N),
+      P: Number(nutrients.P),
+      K: Number(nutrients.K),
       ph: Number(nutrients.pH),
+      temperature: Number(weatherData.temperature),
+      rainfall: Number(weatherData.rainfall),
     };
+
+    console.log("Sending request data:", requestData);
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/crop/predict", // your API endpoint
+        "http://127.0.0.1:8000/api/crop", // your API endpoint
         requestData,
         { headers: { "Content-Type": "application/json" } }
       );
 
-      setRecommendations(response.data.predicted_crops || []);
+      // Split the predicted_crop string into an array of individual recommendations
+      const cropsArray = response.data.predicted_crop ? response.data.predicted_crop.split(" | ") : [];
+      setRecommendations(cropsArray);
     } catch (err) {
       console.error("Error fetching crop recommendations:", err);
       alert("Error fetching crop recommendations. Please try again.");
@@ -175,6 +240,7 @@ const PlotCropSelector = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
+        <MapInitializer />
       </MapContainer>
 
       {/* Form for plot details and nutrient inputs */}
