@@ -9,7 +9,7 @@ import ChatHero from './components/ChatHero'
 import Footer from './components/Footer'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import HomePage from './pages/HomePage'
-import CropSelector from './components/CropSelector'
+import PlotCropSelector from './components/PlotCropSelector'
 import WeatherForecastingPage from './pages/WeatherForecastingPage'
 
 
@@ -22,7 +22,7 @@ function App() {
   <BrowserRouter>
   <Routes>
     <Route path='/' element={<HomePage/>}/>
-   <Route path='/crop-selector' element={<CropSelector/>}/>
+   <Route path='/crop-selector' element={<PlotCropSelector/>}/>
    <Route path='/weather-forecasting' element={<WeatherForecastingPage/>}/>
   </Routes>
   </BrowserRouter>
