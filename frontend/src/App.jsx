@@ -11,6 +11,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import PlotCropSelector from './components/PlotCropSelector'
 import WeatherForecastingPage from './pages/WeatherForecastingPage'
+import ChatBot from './components/ChatBot'
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
     <Route path='/' element={<HomePage/>}/>
    <Route path='/crop-selector' element={<PlotCropSelector/>}/>
    <Route path='/weather-forecasting' element={<WeatherForecastingPage/>}/>
+   <Route path='/krishi-chat' element={<ChatBot/>}/>
   </Routes>
   </BrowserRouter>
   <Footer/>
