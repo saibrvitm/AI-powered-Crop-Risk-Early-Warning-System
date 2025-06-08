@@ -1,0 +1,119 @@
+Region,Mean_NDVI,Center_Lon,Center_Lat,Is_Bengaluru,ID_0,ISO,NAME_0,ID_1,NAME_1,ID_2,NAME_2,TYPE_2,ENGTYPE_2,NL_NAME_2,VARNAME_2
+Region_2,,77.57084647775946,14.475092112469735,False,105,IND,India,2,Andhra Pradesh,3,Anantapur,District,District,,"Anantpur, Ananthapur"
+Region_3,,79.00393766066382,13.456597359032894,False,105,IND,India,2,Andhra Pradesh,4,Chittoor,District,District,,Chitoor|Chittor
+Region_4,,78.77430269817053,14.450746523406877,False,105,IND,India,2,Andhra Pradesh,5,Cuddapah,District,District,,
+Region_6,,80.08127788748527,16.291438610432362,False,105,IND,India,2,Andhra Pradesh,7,Guntur,District,District,,
+Region_7,9.657579454767286e-05,80.79289725061827,16.550410941056914,False,105,IND,India,2,Andhra Pradesh,8,Krishna,District,District,,Kistna
+Region_8,,78.0000284823416,15.52801090170187,False,105,IND,India,2,Andhra Pradesh,9,Kurnool,District,District,,
+Region_9,,79.72296434973812,14.429843338850445,False,105,IND,India,2,Andhra Pradesh,10,Nellore,District,District,,
+Region_10,,79.50950385641944,15.611367900214214,False,105,IND,India,2,Andhra Pradesh,11,Prakasam,District,District,,
+Region_93,0.0008162251291634604,81.05166407267079,18.654668924164042,False,105,IND,India,7,Chhattisgarh,94,Dantewada,District,District,,
+Region_98,0.0,81.12118692079586,20.134140813256206,False,105,IND,India,7,Chhattisgarh,99,Kanker,District,District,,
+Region_105,0.0,80.81230786721954,21.038417040502402,False,105,IND,India,7,Chhattisgarh,106,Raj Nandgaon,District,District,,
+Region_107,,73.08090142535934,20.19474194045413,False,105,IND,India,8,Dadra and Nagar Haveli,108,Dadra and Nagar Haveli,District,District,,
+Region_111,,73.98406110381248,15.55096453004359,False,105,IND,India,11,Goa,112,North Goa,District,District,,
+Region_112,,74.12038087418154,15.195394176308326,False,105,IND,India,11,Goa,113,South Goa,District,District,,
+Region_137,,73.11854090946652,20.4182823980011,False,105,IND,India,12,Gujarat,138,Valsad,District,District,,Bulsar|Walsad
+Region_205,,75.62653448650062,16.21799570114938,False,105,IND,India,17,Karnataka,206,Bagalkot,District,District,,
+Region_206,,77.42237618472198,12.887392930699605,True,105,IND,India,17,Karnataka,207,Bangalore Rural,District,District,,
+Region_207,,77.58682464403557,12.94229480949461,True,105,IND,India,17,Karnataka,208,Bangalore Urban,District,District,,
+Region_208,,74.8278985299948,16.117769983728873,False,105,IND,India,17,Karnataka,209,Belgaum,District,District,,
+Region_209,,76.53055842639334,15.105032612912687,False,105,IND,India,17,Karnataka,210,Bellary,District,District,,
+Region_210,,77.22350402306888,17.950222083962824,False,105,IND,India,17,Karnataka,211,Bidar,District,District,,
+Region_211,,75.95336793957287,16.791531467993337,False,105,IND,India,17,Karnataka,212,Bijapur,District,District,,
+Region_212,,77.0903586438842,11.948682986140586,False,105,IND,India,17,Karnataka,213,Chamrajnagar,District,District,,
+Region_213,,75.68958616646394,13.449436053623252,False,105,IND,India,17,Karnataka,214,Chikmagalur,District,District,,Chikmaglur|Kadur
+Region_214,,76.51248936822316,14.162051210043611,False,105,IND,India,17,Karnataka,215,Chitradurga,District,District,,Chitaldroog|Chitaldrug
+Region_215,,75.26676844085702,12.833054513006406,False,105,IND,India,17,Karnataka,216,Dakshin Kannad,District,District,,
+Region_216,,75.93132824762095,14.351501978983785,False,105,IND,India,17,Karnataka,217,Davanagere,District,District,,
+Region_217,,75.15628298355061,15.386488653549545,False,105,IND,India,17,Karnataka,218,Dharwad,District,District,,"Dhawad, Dharwar"
+Region_218,,75.66666991102532,15.427803572912289,False,105,IND,India,17,Karnataka,219,Gadag,District,District,,
+Region_219,,76.88144507996553,17.051821986822173,False,105,IND,India,17,Karnataka,220,Gulbarga,District,District,,
+Region_220,,76.1049031207442,12.989597267771694,False,105,IND,India,17,Karnataka,221,Hassan,District,District,,
+Region_221,,75.4185057218824,14.734452734647615,False,105,IND,India,17,Karnataka,222,Haveri,District,District,,
+Region_222,4.6604477143466966e-05,75.79915236264605,12.318740624583393,False,105,IND,India,17,Karnataka,223,Kodagu,District,District,,Coorg
+Region_223,,78.01226111599233,13.355866113887336,False,105,IND,India,17,Karnataka,224,Kolar,District,District,,
+Region_224,,76.22041060186952,15.558022237840255,False,105,IND,India,17,Karnataka,225,Koppal,District,District,,
+Region_225,,76.79049069334246,12.603585810348571,False,105,IND,India,17,Karnataka,226,Mandya,District,District,,
+Region_226,,76.43608260659141,12.20217573224918,False,105,IND,India,17,Karnataka,227,Mysore,District,District,,
+Region_227,,76.89009900407842,16.08555462463095,False,105,IND,India,17,Karnataka,228,Raichur,District,District,,
+Region_228,,75.17607817610643,14.052251313625272,False,105,IND,India,17,Karnataka,229,Shimoga,District,District,,
+Region_229,,76.94143582026027,13.513510981500374,False,105,IND,India,17,Karnataka,230,Tumkur,District,District,,
+Region_230,,74.8827607030747,13.464781429520123,False,105,IND,India,17,Karnataka,231,Udupi,District,District,,
+Region_231,,74.62394327389028,14.787562826414524,False,105,IND,India,17,Karnataka,232,Uttar Kannand,District,District,,
+Region_232,,76.4459759288287,9.413453622471248,False,105,IND,India,18,Kerala,233,Alappuzha,District,District,,Alleppey
+Region_233,,76.47423387863546,10.05531493841761,False,105,IND,India,18,Kerala,234,Ernakulam,District,District,,
+Region_234,0.0017069351873132614,77.01325046489626,9.873758335743318,False,105,IND,India,18,Kerala,235,Idukki,District,District,,Idikki
+Region_235,,75.5360938145279,11.992362423815047,False,105,IND,India,18,Kerala,236,Kannur,District,District,,Cannanore
+Region_236,,75.15247921009627,12.459359751028327,False,105,IND,India,18,Kerala,237,Kasaragod,District,District,,
+Region_238,,76.64869301897367,9.62831835936953,False,105,IND,India,18,Kerala,239,Kottayam,District,District,,
+Region_239,,75.83150225386777,11.480782075813062,False,105,IND,India,18,Kerala,240,Kozhikode,District,District,,Calicut
+Region_240,,76.15157667673519,11.129253709109221,False,105,IND,India,18,Kerala,241,Malappuram,District,District,,
+Region_241,,76.54830970134095,10.787205420519212,False,105,IND,India,18,Kerala,242,Palakkad,District,District,,Palghat
+Region_244,,76.31187393275299,10.465609130229861,False,105,IND,India,18,Kerala,245,Thrissur,District,District,,Trichur
+Region_245,0.00017613329927048738,76.09162566983949,11.70489440096653,False,105,IND,India,18,Kerala,246,Wayanad,District,District,,Wynaad|Wynad
+Region_246,,72.9396126711736,10.451273597275124,False,105,IND,India,19,Lakshadweep,247,Kavaratti,District,District,,
+Region_295,,74.64550270539017,19.233217088268614,False,105,IND,India,21,Maharashtra,296,Ahmednagar,District,District,,Ahmadnagar
+Region_298,,75.27591483413968,20.022667204189997,False,105,IND,India,21,Maharashtra,299,Aurangabad,District,District,,
+Region_300,,75.80200053819476,18.925112704671555,False,105,IND,India,21,Maharashtra,301,Bid,District,District,,Bir|Beed|Bhir|Bidh
+Region_301,0.0013106548166309123,76.40431817984627,20.51082539437804,False,105,IND,India,21,Maharashtra,302,Buldana,District,District,,
+Region_302,,79.4377772307225,20.11674218438241,False,105,IND,India,21,Maharashtra,303,Chandrapur,District,District,,Chanda
+Region_304,,80.2342335982405,19.782282467934127,False,105,IND,India,21,Maharashtra,305,Garhchiroli,District,District,,
+Region_306,,72.92318268556059,19.145416738762677,False,105,IND,India,21,Maharashtra,307,Greater Bombay,District,District,,
+Region_307,,77.1165730619165,19.615347809587018,False,105,IND,India,21,Maharashtra,308,Hingoli,District,District,,
+Region_309,,75.98260686539592,19.819725692747223,False,105,IND,India,21,Maharashtra,310,Jalna,District,District,,
+Region_310,,74.16729996670058,16.46679400107312,False,105,IND,India,21,Maharashtra,311,Kolhapur,District,District,,
+Region_311,,76.7595449095642,18.373484732525196,False,105,IND,India,21,Maharashtra,312,Latur,District,District,,"Kulaba, Kolaba, Kolabad"
+Region_313,,77.62064375499776,19.11517988784898,False,105,IND,India,21,Maharashtra,314,Nanded,District,District,,Nander
+Region_315,,74.07783818514737,20.26000301732951,False,105,IND,India,21,Maharashtra,316,Nashik,District,District,,Nasik
+Region_316,,76.03923706278371,18.188225893622455,False,105,IND,India,21,Maharashtra,317,Osmanabad,District,District,,
+Region_317,,76.68153024007796,19.285775316620988,False,105,IND,India,21,Maharashtra,318,Parbhani,District,District,,
+Region_318,,74.07657986708263,18.570547179447964,False,105,IND,India,21,Maharashtra,319,Pune,District,District,,Poona
+Region_319,,73.23018141785919,18.509931110134943,False,105,IND,India,21,Maharashtra,320,Raigarh,District,District,,Raygad
+Region_320,,73.46052513266478,17.27267879325688,False,105,IND,India,21,Maharashtra,321,Ratnagiri,District,District,,
+Region_321,,74.77482660373146,17.110715239436118,False,105,IND,India,21,Maharashtra,322,Sangli,District,District,,South Satara
+Region_322,,74.18109412699071,17.66775235754391,False,105,IND,India,21,Maharashtra,323,Satara,District,District,,North Satara
+Region_323,,73.74296893871465,16.132234786194758,False,105,IND,India,21,Maharashtra,324,Sindhudurg,District,District,,"Kudal, Sindhdurg"
+Region_324,,75.48515982644498,17.78882447099898,False,105,IND,India,21,Maharashtra,325,Solapur,District,District,,Sholapur
+Region_325,,73.16556898737842,19.618486155935503,False,105,IND,India,21,Maharashtra,326,Thane,District,District,,Thana
+Region_327,0.001068825351177967,77.2165146132712,20.238446841910026,False,105,IND,India,21,Maharashtra,328,Washim,District,District,,
+Region_328,,78.15805947724446,20.083930851746384,False,105,IND,India,21,Maharashtra,329,Yavatmal,District,District,,Yeotmal
+Region_391,,79.79652665488685,10.91349373635471,False,105,IND,India,27,Puducherry,392,Karaikal,District,District,,Karaikkal|Karikal
+Region_392,,75.2861322848602,12.074241717385242,False,105,IND,India,27,Puducherry,393,Mahe,District,District,,
+Region_393,,79.74830005519705,11.909316151103344,False,105,IND,India,27,Puducherry,394,Puducherry,District,District,,Pondicherry|Puduchcheri|PondichÃ©ry
+Region_448,0.0003435309973045822,79.22818711371299,11.146720099018577,False,105,IND,India,31,Tamil Nadu,449,Ariyalur,District,District,,
+Region_449,,80.23495207417584,13.04808636861948,False,105,IND,India,31,Tamil Nadu,450,Chennai,District,District,,Madras
+Region_450,,77.07196679623873,10.836771906232894,False,105,IND,India,31,Tamil Nadu,451,Coimbatore,District,District,,
+Region_451,,79.4452285032152,11.525092972415543,False,105,IND,India,31,Tamil Nadu,452,Cuddalore,District,District,,
+Region_452,,78.09742030740539,12.295583515889033,False,105,IND,India,31,Tamil Nadu,453,Dharmapuri,District,District,,Dharampuri
+Region_453,,77.80498330785515,10.379260158336512,False,105,IND,India,31,Tamil Nadu,454,Dindigul,District,District,,Anna
+Region_454,,77.446929532401,11.319382187814167,False,105,IND,India,31,Tamil Nadu,455,Erode,District,District,,Periyar
+Region_455,,79.93615675192117,12.681306074067027,False,105,IND,India,31,Tamil Nadu,456,Kancheepuram,District,District,,
+Region_458,,77.98956527869402,9.909971375903899,False,105,IND,India,31,Tamil Nadu,459,Madurai,District,District,,"Madura, Mathurai"
+Region_459,,79.73608696338329,10.863691093005508,False,105,IND,India,31,Tamil Nadu,460,Nagapattinam,District,District,,
+Region_462,0.002710360884749709,78.87775870110787,11.260483260477082,False,105,IND,India,31,Tamil Nadu,463,Perambalur,District,District,,
+Region_460,0.0004545188884756389,78.12248315163521,11.305296147359345,False,105,IND,India,31,Tamil Nadu,461,Namakkal,District,District,,
+Region_461,5.1756774277194345e-05,76.63281167845551,11.448384731421367,False,105,IND,India,31,Tamil Nadu,462,Nilgiris,District,District,,Nilgiri
+Region_457,0.0,78.11836937868745,10.831786305026709,False,105,IND,India,31,Tamil Nadu,458,Karur,District,District,,
+Region_463,,78.86659365075877,10.342065199575568,False,105,IND,India,31,Tamil Nadu,464,Pudukkottai,District,District,,Pudukottai
+Region_464,,78.68033988575293,9.442918449418956,False,105,IND,India,31,Tamil Nadu,465,Ramanathapuram,District,District,,"Ramananthapuram, Rameswaram, Ramnad"
+Region_465,,78.2091607389949,11.66309337908854,False,105,IND,India,31,Tamil Nadu,466,Salem,District,District,,
+Region_466,-3.0060962791675426e-05,78.5759593271522,9.907016772518023,False,105,IND,India,31,Tamil Nadu,467,Sivaganga,District,District,,Pasumpon Muthuramalinga
+Region_467,,79.22359063611088,10.655249827793785,False,105,IND,India,31,Tamil Nadu,468,Thanjavur,District,District,,Tanjore
+Region_468,,77.42393232021162,9.880751439386028,False,105,IND,India,31,Tamil Nadu,469,Theni,District,District,,
+Region_469,,79.92518938442434,13.230328522386813,False,105,IND,India,31,Tamil Nadu,470,Thiruvallur,District,District,,
+Region_470,,79.53460868630388,10.66934808221217,False,105,IND,India,31,Tamil Nadu,471,Thiruvarur,District,District,,
+Region_472,,78.55491393792528,10.876685258615906,False,105,IND,India,31,Tamil Nadu,473,Tiruchchirappalli,District,District,,
+Region_474,,79.154458654043,12.418655269773655,False,105,IND,India,31,Tamil Nadu,475,Tiruvannamalai,District,District,,
+Region_475,,78.99814820456402,12.800637803865222,False,105,IND,India,31,Tamil Nadu,476,Vellore,District,District,,North Arcot
+Region_476,,79.28446742363916,11.960325100139324,False,105,IND,India,31,Tamil Nadu,477,Villupuram,District,District,,
+Region_478,,78.96672966506821,19.254433024782802,False,105,IND,India,32,Telangana,479,Adilabad,District,District,,
+Region_479,-0.008903772785078423,78.46413087192005,17.385620240920243,False,105,IND,India,32,Telangana,480,Hyderabad,District,District,,
+Region_480,,79.23473572268674,18.546226728030575,False,105,IND,India,32,Telangana,481,Karimnagar,District,District,,
+Region_481,,80.6790880283413,17.590040390931932,False,105,IND,India,32,Telangana,482,Khammam,District,District,,Khammamamet
+Region_482,,78.14044096047056,16.493430758907838,False,105,IND,India,32,Telangana,483,Mahbubnagar,District,District,,Mehbubnagar;Mahaboobnagar
+Region_483,,78.21079722029229,17.88486014901616,False,105,IND,India,32,Telangana,484,Medak,District,District,,Sangapeddi
+Region_484,,79.28145060165535,17.061890098323534,False,105,IND,India,32,Telangana,485,Nalgonda,District,District,,
+Region_485,,78.13937539271664,18.523969408729585,False,105,IND,India,32,Telangana,486,Nizamabad,District,District,,
+Region_486,,78.17220391814277,17.284057220963216,False,105,IND,India,32,Telangana,487,Rangareddi,District,District,,Rangareddy
+Region_487,,79.79165863343597,17.949973834478044,False,105,IND,India,32,Telangana,488,Warangal,District,District,,
