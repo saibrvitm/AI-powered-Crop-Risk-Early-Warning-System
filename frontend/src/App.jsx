@@ -11,9 +11,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import PlotCropSelector from './components/PlotCropSelector'
 import WeatherForecastingPage from './pages/WeatherForecastingPage'
-import DiseasePredictor from './components/DiseasePredictor'
-import TranslationService from './utils/Translation'
-import AboutUs from './components/AboutUs'
+
 
 function App() {
   const [count, setCount] = useState(0)
@@ -24,10 +22,8 @@ function App() {
   <BrowserRouter>
   <Routes>
     <Route path='/' element={<HomePage/>}/>
-    <Route path='/crop-selector' element={<PlotCropSelector/>}/>
-    <Route path='/weather-forecasting' element={<WeatherForecastingPage/>}/>
-    <Route path='/disease-detection' element={<DiseasePredictor/>}/>
-    <Route path='/about' element={<AboutUs/>}/>
+   <Route path='/crop-selector' element={<PlotCropSelector/>}/>
+   <Route path='/weather-forecasting' element={<WeatherForecastingPage/>}/>
   </Routes>
   </BrowserRouter>
   <TranslationService />
