@@ -13,6 +13,7 @@ import PlotCropSelector from './components/PlotCropSelector'
 import WeatherForecastingPage from './pages/WeatherForecastingPage'
 import DiseasePredictor from './components/DiseasePredictor'
 import TranslationService from './utils/Translation'
+import AboutUs from './components/AboutUs'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -26,6 +27,7 @@ function App() {
     <Route path='/crop-selector' element={<PlotCropSelector/>}/>
     <Route path='/weather-forecasting' element={<WeatherForecastingPage/>}/>
     <Route path='/disease-detection' element={<DiseasePredictor/>}/>
+    <Route path='/about' element={<AboutUs/>}/>
   </Routes>
   </BrowserRouter>
   <TranslationService />
